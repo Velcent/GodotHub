@@ -298,12 +298,15 @@ and all other namespaces (`git`, `settings`, `versions`, etc.) fall back to
 
 | Locale | Language | Status |
 |--------|----------|--------|
+| `ar-MA` | العربية | 🧪 Beta |
 | `en-US` | English | ✅ Complete |
-| `ja-JP` | 日本語 | ✅ Complete |
 | `es-MX` | Español | 🚧 Incomplete |
-| `zh-CN` | 简体中文 | 🧪 Beta |
+| `fr-FR` | Français | ✅ Complete |
+| `ja-JP` | 日本語 | ✅ Complete |
+| `pt-BR` | Português (Brasil) | 🧪 Beta |
 | `ru-RU` | Русский | 🚧 Incomplete |
-| `ar-MA` | العربية | 🚧 Incomplete |
+| `vi-VN` | Tiếng Việt | ✅ Complete |
+| `zh-CN` | 简体中文 | 🧪 Beta |
 
 **Total keys:** ~1,321 across 8 namespaces
 
@@ -324,11 +327,14 @@ src/i18n/
     │   ├── nav.json          #   Sidebar navigation labels
     │   ├── changelog.json    #   Changelog view
     │   └── dashboard.json    #   Dashboard greetings
-    ├── ja-JP/
-    ├── es-MX/
-    ├── zh-CN/
-    ├── ru-RU/
     └── ar-MA/
+    ├── es-MX/
+    ├── fr-FR/
+    ├── ja-JP/
+    ├── pt-BR/
+    ├── ru-RU/
+    ├── vi-VN/
+    ├── zh-CN/
 ```
 
 ### Namespace Reference
