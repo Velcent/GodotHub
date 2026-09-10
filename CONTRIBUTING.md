@@ -462,31 +462,28 @@ This automatically:
    ```
 2. **Register the resources** in `src/i18n/index.ts`:
    ```ts
-   import jaJPNav from './locales/ja-JP/nav.json'
-   import jaJPCommon from './locales/ja-JP/common.json'
-   import jaJPSettings from './locales/ja-JP/settings.json'
-   import jaJPGit from './locales/ja-JP/git.json'
-   import jaJPChangelog from './locales/ja-JP/changelog.json'
-   import jaJPOnboarding from './locales/ja-JP/onboarding.json'
-   import jaJPVersions from './locales/ja-JP/versions.json'
-   import jaJPDashboard from './locales/ja-JP/dashboard.json'
+  import jaJPNav from './locales/ja-JP/nav.json'
+  import jaJPCommon from './locales/ja-JP/common.json'
+  import jaJPSettings from './locales/ja-JP/settings.json'
+  import jaJPGit from './locales/ja-JP/git.json'
+  import jaJPChangelog from './locales/ja-JP/changelog.json'
+  import jaJPOnboarding from './locales/ja-JP/onboarding.json'
+  import jaJPVersions from './locales/ja-JP/versions.json'
+  import jaJPDashboard from './locales/ja-JP/dashboard.json'
 
-   const jaJPResources = {
-     nav: jaJPNav,
-     common: jaJPCommon,
-     settings: jaJPSettings,
-     git: jaJPGit,
-     changelog: jaJPChangelog,
-     onboarding: jaJPOnboarding,
-     versions: jaJPVersions,
-     dashboard: jaJPDashboard,
-   }
-
-   const resources = {
-     'en-US': { … },
-     'ja-JP': jaJPResources,
-     ja: jaJPResources,  // optional shorthand
-   }
+  const resources = {
+    'en-US': { … },
+    'ja-JP': {
+      nav: jaJPNav,
+      common: jaJPCommon,
+      settings: jaJPSettings,
+      git: jaJPGit,
+      changelog: jaJPChangelog,
+      onboarding: jaJPOnboarding,
+      versions: jaJPVersions,
+      dashboard: jaJPDashboard,
+    }
+  }
    ```
 3. **Add it to the language picker** in `src/i18n/languages.ts`:
    ```ts
