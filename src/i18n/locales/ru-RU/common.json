@@ -204,6 +204,7 @@
   "args_gpu_index_desc": "Использовать GPU с индексом 1 (дискретная видеокарта)",
   "sort_categories": "Категории",
   "sort_recent": "Недавно открытые",
+  "sort_manual": "Вручную",
   "sort_name_asc": "Имя (A–Z)",
   "sort_name_desc": "Имя (Z–A)",
   "sort_created_desc": "Дата добавления (новые)",

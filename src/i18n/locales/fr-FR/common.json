@@ -222,6 +222,7 @@
   "args_gpu_index_desc": "Utiliser le GPU d'index 1 (GPU dédié)",
   "sort_categories": "Catégories",
   "sort_recent": "Ouverts récemment",
+  "sort_manual": "Manuel",
   "sort_name_asc": "Nom (A–Z)",
   "sort_name_desc": "Nom (Z–A)",
   "sort_created_desc": "Date d'ajout (plus récents)",

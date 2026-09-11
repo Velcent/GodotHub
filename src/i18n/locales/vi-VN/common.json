@@ -222,6 +222,7 @@
   "args_gpu_index_desc": "Dùng GPU index 1 (GPU rời)",
   "sort_categories": "Danh mục",
   "sort_recent": "Mở gần đây",
+  "sort_manual": "Thủ công",
   "sort_name_asc": "Tên (A–Z)",
   "sort_name_desc": "Tên (Z–A)",
   "sort_created_desc": "Ngày thêm (mới nhất)",

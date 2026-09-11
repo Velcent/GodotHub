@@ -222,6 +222,7 @@
   "args_gpu_index_desc": "Use GPU index 1 (بطاقة الرسومات المخصصة)",
   "sort_categories": "التصنيفات",
   "sort_recent": "مفتوح مؤخرا",
+  "sort_manual": "يدوي",
   "sort_name_asc": "الإسم (A–Z)",
   "sort_name_desc": "الإسم (Z–A)",
   "sort_created_desc": "التاريخ المضاف (الأحدث)",

@@ -188,6 +188,7 @@
   "other": "其他",
   "sort_categories": "分类",
   "sort_recent": "最近打开",
+  "sort_manual": "手动",
   "sort_name_asc": "名称 (A–Z)",
   "sort_name_desc": "名称 (Z–A)",
   "sort_created_desc": "添加日期（最新）",

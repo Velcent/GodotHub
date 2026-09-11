@@ -1202,5 +1202,22 @@
     ],
     "known_issues": [],
     "created_at": 1788557838
+  },
+  {
+    "id": "f3339473-f79a-4237-825d-23cf13247d26",
+    "version": "v1.4.3",
+    "date": "2026-09-11",
+    "notes": [
+      {
+        "category": "fix",
+        "text": "Time track bug where it accumulated next day's tracked time into one if project was opened during midnight"
+      },
+      {
+        "category": "improve",
+        "text": "Re-worked on Drag n Drop for Project cards"
+      }
+    ],
+    "known_issues": [],
+    "created_at": 1789156269
   }
 ]

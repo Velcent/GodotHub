@@ -219,6 +219,7 @@
   "args_gpu_index_desc": "GPU インデックス 1（専用 GPU）を使う",
   "sort_categories": "カテゴリ",
   "sort_recent": "最近開いた順",
+  "sort_manual": "手動",
   "sort_name_asc": "名前（A→Z）",
   "sort_name_desc": "名前（Z→A）",
   "sort_created_desc": "追加日（新しい順）",

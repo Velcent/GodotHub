@@ -340,20 +340,29 @@ export function ProjectsView({
     return list
   }, [projects, debouncedQuery, tagFilter, categoryFilter])
 
+  // 'categories' is only a distinct mode while categories are enabled. Any
+  // stored 'categories' value otherwise resolves to a plain manual order.
+  const effectiveSortBy: ProjectSortOption =
+    sortBy === 'categories' && !settings.categories_enabled ? 'manual' : sortBy
+
   const filtered = useMemo(() => {
     let list = baseFiltered
-    const cmp = comparatorFor(sortBy, sortNow)
+    const cmp = comparatorFor(effectiveSortBy, sortNow)
     return [...list].sort((a, b) => {
       if (a.pinned !== b.pinned) return a.pinned ? -1 : 1
       if (a.pinned) return a.name.localeCompare(b.name)
       return cmp ? cmp(a, b) : a.sort_order - b.sort_order
     })
-  }, [baseFiltered, sortBy, sortNow])
+  }, [baseFiltered, effectiveSortBy, sortNow])
 
   const hasActiveFilters =
     query.trim() !== '' || tagFilter !== null || categoryFilter !== null
 
-  const categoriesEnabled = settings.categories_enabled && sortBy === 'categories'
+  const categoriesEnabled = settings.categories_enabled && effectiveSortBy === 'categories'
+
+  // Dragging is available in every view and sort mode; a filtered or searched
+  // subset has no stable order to persist, so it is left alone.
+  const dragEnabled = !hasActiveFilters
 
   const visualOrder = useMemo(() => {
     if (!categoriesEnabled) return filtered
@@ -508,6 +517,32 @@ export function ProjectsView({
     await refresh()
   }, [refresh])
 
+  // Dropping a card pins the list to a custom order. A grouped (categories)
+  // surface keeps its grouping; a flat surface switches to manual order.
+  const handleListReorder = useCallback(
+    async (orderedIds: string[]) => {
+      if (!categoriesEnabled) setSortBy('manual')
+      await reorder(orderedIds)
+    },
+    [categoriesEnabled, reorder],
+  )
+
+  const handleKanbanReorder = useCallback(
+    async (orderedIds: string[]) => {
+      setSortBy(settings.categories_enabled ? 'categories' : 'manual')
+      await reorder(orderedIds)
+    },
+    [settings.categories_enabled, reorder],
+  )
+
+  const handleMoveProject = useCallback(
+    async (id: string, category: string, destOrderedIds: string[]) => {
+      setSortBy(settings.categories_enabled ? 'categories' : 'manual')
+      await moveProject(id, category, destOrderedIds)
+    },
+    [settings.categories_enabled, moveProject],
+  )
+
   const searchRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
@@ -630,9 +665,13 @@ export function ProjectsView({
         <Dropdown
           align="left"
           trigger={({ open, toggle }) => {
-            const defaultSort: ProjectSortOption = 'categories'
-            const isCustomSort = sortBy !== defaultSort
-            const activeSortLabel = SORT_OPTIONS.find((o) => o.value === sortBy)
+            const defaultSort: ProjectSortOption = settings.categories_enabled
+              ? 'categories'
+              : 'manual'
+            const isCustomSort = effectiveSortBy !== defaultSort
+            const activeSortLabel = SORT_OPTIONS.find(
+              (o) => o.value === effectiveSortBy,
+            )
             return (
               <motion.button
                 type="button"
@@ -656,10 +695,12 @@ export function ProjectsView({
               </motion.button>
             )
           }}
-          items={SORT_OPTIONS.map((opt) => ({
+          items={SORT_OPTIONS.filter(
+            (opt) => opt.value !== 'categories' || settings.categories_enabled,
+          ).map((opt) => ({
             key: opt.value,
             label: tc(opt.labelKey),
-            active: opt.value === sortBy,
+            active: opt.value === effectiveSortBy,
             onClick: () => setSortBy(opt.value),
           }))}
         />
@@ -930,15 +971,19 @@ export function ProjectsView({
             selectedIds={selectedIds}
             onToggleSelect={(id, e) => toggleSelect(id, e)}
             selecting={selecting}
-            onReorder={settings.categories_enabled && sortBy === 'categories' && !hasActiveFilters ? reorder : undefined}
-            onMoveProject={settings.categories_enabled && sortBy === 'categories' && !hasActiveFilters ? moveProject : undefined}
+            onReorder={dragEnabled ? handleKanbanReorder : undefined}
+            onMoveProject={
+              dragEnabled && settings.categories_enabled
+                ? handleMoveProject
+                : undefined
+            }
           />
         ) : viewMode === 'grid' ? (
           <ProjectCardGrid
             projects={filtered}
             installedVersions={installed}
             categories={settings.categories_enabled ? categories : []}
-            categoriesEnabled={settings.categories_enabled && sortBy === 'categories'}
+            categoriesEnabled={categoriesEnabled}
             gitStatusMap={gitStatusMap}
             launchWithConsole={settings.launch_with_console}
             onTogglePin={(id) => setPinned(id, !projects.find((p) => p.id === id)?.pinned)}
@@ -961,8 +1006,10 @@ export function ProjectsView({
             selectedIds={selectedIds}
             onToggleSelect={(id, e) => toggleSelect(id, e)}
             selecting={selecting}
-            onReorder={settings.categories_enabled && sortBy === 'categories' && !hasActiveFilters ? reorder : undefined}
-            onMoveProject={settings.categories_enabled && sortBy === 'categories' && !hasActiveFilters ? moveProject : undefined}
+            onReorder={dragEnabled ? handleListReorder : undefined}
+            onMoveProject={
+              dragEnabled && categoriesEnabled ? handleMoveProject : undefined
+            }
           />
         ) : (
           <ProjectCardList
@@ -971,9 +1018,11 @@ export function ProjectsView({
             animationThreshold={settings.animation_threshold}
             hasActiveFilters={hasActiveFilters}
             categories={settings.categories_enabled ? categories : []}
-            categoriesEnabled={settings.categories_enabled && sortBy === 'categories'}
-            onReorder={settings.categories_enabled && sortBy === 'categories' && !hasActiveFilters ? reorder : undefined}
-            onMoveProject={settings.categories_enabled && sortBy === 'categories' && !hasActiveFilters ? moveProject : undefined}
+            categoriesEnabled={categoriesEnabled}
+            onReorder={dragEnabled ? handleListReorder : undefined}
+            onMoveProject={
+              dragEnabled && categoriesEnabled ? handleMoveProject : undefined
+            }
             renderCard={(p) => (
               <ProjectCard
                 project={p}

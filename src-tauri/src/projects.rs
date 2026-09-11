@@ -131,7 +131,13 @@ fn settle_project_session(
         }
         None => {
             if let Some(start) = project.session_started_at_ms.take() {
-                let elapsed_ms = epoch_ms().saturating_sub(start);
+                // Godot exited while the app was not watching, so we cannot know
+                // when it stopped. Bound the session to the last moment the app
+                // was known to be alive instead of crediting every hour since it
+                // started, which counted the app's own downtime as work.
+                let observed_end = crate::time_stats::last_active_ms(app).max(start);
+                let end = epoch_ms().min(observed_end);
+                let elapsed_ms = end.saturating_sub(start);
                 added_ms = elapsed_ms.saturating_sub(SESSION_START_DELAY_MS);
                 session_start_ms = Some(start);
                 changed = true;
@@ -950,6 +956,7 @@ pub fn open_project(
     project.last_opened = Some(chrono::Utc::now().to_rfc3339());
     project.session_started_at_ms = Some(epoch_ms() + SESSION_START_DELAY_MS);
     write_projects(&app, &projects)?;
+    crate::time_stats::touch_activity(&app);
 
     let _ = crate::tray::refresh_tray_menu(app.clone());
 
@@ -1055,6 +1062,8 @@ fn adopt_terminal_pid(app: &AppHandle, id: &str, pid_file: &Path) {
 fn wait_until_exited(app: &AppHandle, id: &str) {
     const POLL: std::time::Duration = std::time::Duration::from_millis(500);
     loop {
+        // Keeps the "app was alive" bound fresh while a session is running.
+        crate::time_stats::touch_activity(app);
         let Some(state) = app.try_state::<ActiveProcesses>() else {
             return;
         };
