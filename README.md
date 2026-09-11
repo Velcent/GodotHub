@@ -9,6 +9,7 @@
   <img width="300" height="70" alt="patreon-badge" src="https://github.com/user-attachments/assets/931aa0ac-f46b-4155-81cd-3615ed55122b" />
   </a>
 </p>
+
 ## Screenshots
 
 <table>
