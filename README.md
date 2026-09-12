@@ -1,5 +1,7 @@
 <p align="center">
-  <img width="800" height="340" alt="cover" src="https://github.com/user-attachments/assets/29ea1efa-e977-4417-9da6-69c81104fc97" />
+  <a href="https://ryko.is-a.dev/godothub">
+    <img width="800" height="340" alt="cover" src="https://github.com/user-attachments/assets/29ea1efa-e977-4417-9da6-69c81104fc97" />
+  </a>
 </p>
 <p align="center">
   <img width="800" height="210" alt="warning-cover" src="https://github.com/user-attachments/assets/cc3c0d68-57a3-4ab6-b025-61f5b0bcef61" />
